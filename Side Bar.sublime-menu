@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "New from Template",
+        "id": "extended-templates-new",
+        "command": "new_from_template",
+        "args": {
+			"paths": []
+		}
+    }
+]
