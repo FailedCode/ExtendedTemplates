@@ -1,0 +1,28 @@
+// Extended Templates default settings.
+//
+// In order to tweak the settings, you should NOT
+// edit this file, but instead the user-specific,
+// empty-by-default version under
+// "Preferences / Package Settings / Extended Templates / Settings - User".
+//
+{
+	// This is a list of all folders containing
+	// json configuration files for templates
+	"include_folders": [
+		"./templates/"
+	],
+
+	// Block of global variables.
+	// These should be the same for every template.
+	// Copy this block into your user settings file
+	// to set them up.
+	"vars": {
+		"author_name": "<set author_name>",
+		"author_email": "<set author_email>"
+	},
+
+	// Writes to console
+	// "NONE", "INFO", "ERROR"
+	//
+	"log_level": "ERROR"
+}
