@@ -123,11 +123,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
     def run(self, paths=[]):
         # Find all Snippets
-        if len(self.snippet_list) is 0:
-            self.log('snippet cache empty, searching include folders...')
-            self.load_include_folders()
-        else:
-            self.log('use snippets from cache')
+        self.load_include_folders()
 
         previewlist = []
         for snippet in self.snippet_list:
