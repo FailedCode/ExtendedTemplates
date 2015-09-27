@@ -1,0 +1,8 @@
+{
+	"name": "${name}",
+	"description": "",
+	"vars": {},
+	"files_and_folders": [
+		"readme.md"
+	]
+}
