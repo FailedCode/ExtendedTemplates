@@ -192,24 +192,14 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                     if _template:
                         self.log('fill file with: ' + _template)
                         content = self.util.get_file_content(_template)
-                        content = self.replace_vars_content(snippet, content)
+                        content = sublime.expand_variables(content, snippet.vars)
                         self.util.put_file_content(_file, content)
 
     def replace_vars(self, snippet):
         for i, item in enumerate(snippet.files_and_folders):
-            for v in snippet.vars:
-                pattern = '\$\{'+re.escape(v)+'\}'
-                replace = snippet.vars[v]
-                item = re.sub(pattern, replace, item)
-                snippet.files_and_folders[i] = item
+            item = sublime.expand_variables(item, snippet.vars)
+            snippet.files_and_folders[i] = item
         return snippet
-
-    def replace_vars_content(self, snippet, content):
-        for v in snippet.vars:
-            pattern = '\$\{'+re.escape(v)+'\}'
-            replace = snippet.vars[v]
-            content = re.sub(pattern, replace, content)
-        return content
 
     def find_vars(self, txt):
         """
