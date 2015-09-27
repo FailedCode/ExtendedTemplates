@@ -23,7 +23,7 @@
 	},
 
 	// Writes to console
-	// "NONE", "INFO", "ERROR"
+	// "NONE", "DEBUG", "INFO", "WARN", "ERROR", 	
 	//
 	"log_level": "ERROR"
 }

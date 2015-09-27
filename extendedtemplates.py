@@ -111,14 +111,14 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         self.util = ExtendedTemplatesUtility()
         self.settings = self.util.load_settings()
         self.log_level = self.settings.get('log_level', 'NONE')
-        self.log_level_list = {'NONE': 0, 'INFO': 50, 'ERROR': 100}
+        self.log_level_list = {'NONE': 0, 'DEBUG': 25, 'INFO': 50, 'WARN': 75, 'ERROR': 100}
         self.snippet_list = []
         self.log('log_level: ' + self.log_level)
 
     def log(self, msg, level='INFO'):
         if self.log_level is 'NONE':
             return
-        if self.log_level_list[self.log_level] < self.log_level_list[level]:
+        if self.log_level_list[self.log_level] > self.log_level_list[level]:
             return
         print('{0} - {1}: {2}'.format(self.util.plugin_name, level, msg))
 
