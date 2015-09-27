@@ -22,7 +22,7 @@ Files may be appended with a pipe "|" character, followed by a path to a second 
 template for the first file. The Template file may contain variables. The path is relative to
 the snippet file.
 
-### Example
+### Examples
 ``` json
 {
 	"name": "Test",
@@ -36,6 +36,35 @@ the snippet file.
 	]
 }
 ```
+Creates:
+| Path | Description |
+|:-----|:------------|
+| `base/` | Empty Directory |
+| `base/foobar/` | Empty Directory |
+| `base/readme.md` | Empty File |
+
+
+``` json
+{
+	"name": "HTML",
+	"description": "Small HTML project",
+	"vars": {},
+	"files_and_folders": [
+		"css/style.css",
+		"js/script.js",
+		"index.html|html/index.html"
+	]
+}
+```
+Creates:
+| Path | Description |
+|:-----|:------------|
+| `css/` | Empty Directory |
+| `css/style.css` | Empty File |
+| `js/` | Empty Directory |
+| `js/script.js` | Empty File |
+| `index.html` | File with the contents of the file `html/index.html` (relative to the json file) |
+
 
 ## Variables
 The user gets promptet to input variable values if they are not set in the snippet or the settings.
@@ -43,7 +72,10 @@ Occurences of `${<var_name>}` will be replaced.
 
 ### Special vars
 These variables are filled on runtime with the current date/time:
-`_timestamp`, `_datetime`, `_date`, `_time`
+  * `_timestamp` - `2015-09-27T16:59:15Z`
+  * `_datetime` - `2015-09-27 16:59`
+  * `_date` - `2015-09-27`
+  * `_time` - `16:59`
 
 ## Inspired by
 https://github.com/bit101/STProjectMaker
