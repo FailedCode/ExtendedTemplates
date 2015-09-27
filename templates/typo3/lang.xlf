@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="" product-name="${extension_name}">
+	<file source-language="en" datatype="plaintext" original="messages" date="${_timestamp}" product-name="${extension_name}">
 		<header/>
 		<body>
 			<trans-unit id="translationid">

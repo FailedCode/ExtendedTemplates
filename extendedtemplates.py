@@ -4,6 +4,7 @@ import os
 import json
 import re
 import functools
+import datetime
 
 
 class SnippetFile(object):
@@ -213,6 +214,20 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         variables = dict(zip(variables, variables))
         return variables
 
+    def special_vars(self):
+        """
+            Generates some usefull variables like
+            Date, Time
+        """
+        today = datetime.datetime.today()
+        variables = {
+            "_timestamp": today.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            "_datetime": today.strftime('%Y-%m-%d %H:%M'),
+            "_date": today.strftime('%Y-%m-%d'),
+            "_time": today.strftime('%H:%M')
+        }
+        return variables
+
     def template_files(self, file_list):
         """
             Finds the 1. the name of the file to be
@@ -261,14 +276,17 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                 new_vars = self.find_vars(text)
                 template_file_vars = self.util.merge_dicts(template_file_vars, new_vars)
 
-        # Global variables set in the settings file
-        global_vars = self.settings.get('vars')
-
         # Template variables set in the snippet file
         template_vars = snippet_data['vars']
 
+        # Global variables set in the settings file
+        global_vars = self.settings.get('vars')
+
+        # Generated variables
+        special_vars = self.special_vars()
+
         # absolutely all variables to be used
-        all_vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars)
+        all_vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars, special_vars)
 
         snippet = SnippetFile(
             snippet_data['name'],

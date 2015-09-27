@@ -41,6 +41,10 @@ the snippet file.
 The user gets promptet to input variable values if they are not set in the snippet or the settings.
 Occurences of `${<var_name>}` will be replaced.
 
+### Special vars
+These variables are filled on runtime with the current date/time:
+`_timestamp`, `_datetime`, `_date`, `_time`
+
 ## Inspired by
 https://github.com/bit101/STProjectMaker
 
