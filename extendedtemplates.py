@@ -18,6 +18,7 @@ class SnippetFile(object):
         self.files_and_folders = files_and_folders
         self.vars = var
         self.path = path
+        self.dir = os.path.dirname(path)
 
 
 class ExtendedTemplatesUtility(object):
@@ -147,6 +148,9 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         # only use one path
         path = paths[0]
         snippet = self.snippet_list[item]
+
+        # load data now
+        self.load_snippet_file(snippet)
         self.log('run snippet "{0}" on path "{1}"'.format(snippet.name, path))
 
         # Fill all variables
@@ -175,7 +179,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             _template = ''
             if '|' in item:
                 item, tmpl = re.findall('([^|]*)\|(.*)', item)[0]
-                _template = self.util.resolve_path(tmpl, snippet.path)
+                _template = self.util.resolve_path(tmpl, snippet.dir)
 
             _folder, _file = os.path.split(item)
             newfolder = self.util.resolve_path(_folder, path)
@@ -240,45 +244,34 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                 result = self.util.merge_dicts(result, templates)
         return result
 
-    def load_snippet_file(self, path):
+    def load_snippet_file(self, snippet):
         """
-            The snippet json files need to be
-            loaded and somewhat parsed so they can
-            be chosen and used
+            The snippet json file needs to be
+            loaded and somewhat parsed
         """
-
-        # the filepath sould be already absolute and existing
-        text = self.util.get_file_content(path)
-
-        try:
-            snippet_data = json.loads(text)
-        except:
-            self.log('malformed json in "{0}"'.format(path), 'ERROR')
-            return
-
         # First thing is to check, wich files
         # are going to be used
-        files_and_folders = '\n'.join(snippet_data['files_and_folders'])
+        files_and_folders = '\n'.join(snippet.files_and_folders)
 
         # There may be variables used in the paths
         path_vars = self.find_vars(files_and_folders)
 
         # Files to be used for the template
-        template_files = self.template_files(snippet_data['files_and_folders'])
+        template_files = self.template_files(snippet.files_and_folders)
 
         # each template file may contain variables
         # so we need to find those too
-        template_file_vars = []
+        template_file_vars = {}
         for i in template_files:
             # paths in the snippet file are of course relative to the snippet file
-            template_path = self.util.resolve_path(template_files[i], os.path.dirname(path))
+            template_path = self.util.resolve_path(template_files[i], snippet.dir)
             if os.path.exists(template_path):
-                text = self.util.get_file_content(template_path)
-                new_vars = self.find_vars(text)
+                template_content = self.util.get_file_content(template_path)
+                new_vars = self.find_vars(template_content)
                 template_file_vars = self.util.merge_dicts(template_file_vars, new_vars)
 
         # Template variables set in the snippet file
-        template_vars = snippet_data['vars']
+        template_vars = snippet.vars
 
         # Global variables set in the settings file
         global_vars = self.settings.get('vars')
@@ -287,14 +280,24 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         special_vars = self.special_vars()
 
         # absolutely all variables to be used
-        all_vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars, special_vars)
+        snippet.vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars, special_vars)
+
+    def load_snippet_preview(self, path):
+        # the filepath sould be already absolute and existing
+        snippet_content = self.util.get_file_content(path)
+
+        try:
+            snippet_data = json.loads(snippet_content)
+        except:
+            self.log('malformed json in "{0}"'.format(path), 'ERROR')
+            return
 
         snippet = SnippetFile(
             snippet_data['name'],
             snippet_data['description'],
             snippet_data['files_and_folders'],
-            all_vars,
-            os.path.dirname(path)
+            snippet_data['vars'],
+            path
         )
         self.snippet_list.append(snippet)
 
@@ -303,16 +306,15 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         include_folders = self.settings.get('include_folders')
 
         for folder in include_folders:
-
             # Rewrite the path to something more usefull
             folder = self.util.resolve_path(folder, self.util.get_plugin_dir())
 
             # Inform user about misconfiguration
             if not os.path.exists(folder):
-                self.log('The folder "{0}" in "include_folders" does not exists'.format(folder), 'ERROR')
+                self.log('The folder "{0}" in "include_folders" does not exists'.format(folder), 'WARN')
                 continue
 
             # Look for .json files in valid folders
             for file in os.listdir(folder):
                 if file.endswith(".json"):
-                    self.load_snippet_file(os.path.join(folder, file))
+                    self.load_snippet_preview(os.path.join(folder, file))
