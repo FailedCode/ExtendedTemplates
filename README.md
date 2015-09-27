@@ -37,8 +37,9 @@ the snippet file.
 }
 ```
 Creates:
+
 | Path | Description |
-|:-----|:------------|
+| :--- | :---------- |
 | `base/` | Empty Directory |
 | `base/foobar/` | Empty Directory |
 | `base/readme.md` | Empty File |
@@ -57,8 +58,9 @@ Creates:
 }
 ```
 Creates:
+
 | Path | Description |
-|:-----|:------------|
+| :--- | :---------- |
 | `css/` | Empty Directory |
 | `css/style.css` | Empty File |
 | `js/` | Empty Directory |
