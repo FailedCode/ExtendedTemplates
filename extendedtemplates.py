@@ -49,15 +49,13 @@ class ExtendedTemplatesUtility(object):
         return path
 
     def get_file_content(self, path):
-        f = open(path, "r")
-        content = f.read()
-        f.close()
+        with open(path, "r") as f:
+            content = f.read()
         return content
 
     def put_file_content(self, path, content):
-        f = open(path, "a")
-        f.write(content)
-        f.close()
+        with open(path, "a") as f:
+            f.write(content)
 
     def touch_file(self, path):
         with open(path, 'a'):
