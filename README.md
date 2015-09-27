@@ -74,10 +74,13 @@ Occurences of `${<var_name>}` will be replaced.
 
 ### Special vars
 These variables are filled on runtime with the current date/time:
-  * `_timestamp` - `2015-09-27T16:59:15Z`
-  * `_datetime` - `2015-09-27 16:59`
-  * `_date` - `2015-09-27`
-  * `_time` - `16:59`
+
+| Variable | Format | Example Value |
+| :------- | :----- | :------------ |
+| `_timestamp` | `%Y-%m-%dT%H:%M:%SZ` | `2015-09-27T16:59:15Z` |
+| `_datetime` | `%Y-%m-%d %H:%M` | `2015-09-27 16:59` |
+| `_date` | `%Y-%m-%d` | `2015-09-27` |
+| `_time` | `%H:%M` | `16:59` |
 
 ## Inspired by
 https://github.com/bit101/STProjectMaker
