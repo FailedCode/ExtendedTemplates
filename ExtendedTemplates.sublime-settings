@@ -18,7 +18,8 @@
 	// to set them up.
 	"vars": {
 		"author_name": "<set author_name>",
-		"author_email": "<set author_email>"
+		"author_email": "<set author_email>",
+		"author_company": ""
 	},
 
 	// Writes to console
