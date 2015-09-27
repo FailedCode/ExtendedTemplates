@@ -250,8 +250,11 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         # the filepath sould be already absolute and existing
         text = self.util.get_file_content(path)
 
-        # todo: try/catch malformed json
-        snippet_data = json.loads(text)
+        try:
+            snippet_data = json.loads(text)
+        except:
+            self.log('malformed json in "{0}"'.format(path), 'ERROR')
+            return
 
         # First thing is to check, wich files
         # are going to be used
