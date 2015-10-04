@@ -113,6 +113,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         self.log_level = self.settings.get('log_level', 'NONE')
         self.log_level_list = {'NONE': 0, 'DEBUG': 25, 'INFO': 50, 'WARN': 75, 'ERROR': 100}
         self.snippet_list = []
+        self.template_seperator = '|'
         self.log('log_level: ' + self.log_level)
 
     def log(self, msg, level='INFO'):
@@ -178,10 +179,10 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             # item = os.path.normpath(item)
 
             _templates = []
-            if '|' in item:
-                item, tmpl = re.findall('([^|]*)\|(.*)', item)[0]
-                if '|' in tmpl:
-                    _templates = tmpl.split('|')
+            if self.template_seperator in item:
+                item, tmpl = item.split(self.template_seperator, 1)
+                if self.template_seperator in tmpl:
+                    _templates = tmpl.split(self.template_seperator)
                 else:
                     _templates = [tmpl]
 
@@ -246,16 +247,15 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
     def template_files(self, file_list):
         """
             Finds the 1. the name of the file to be
-            created and 2. the file being used as
+            created and 2. the file(s) being used as
             template for it
         """
         result = {}
         for path in file_list:
-            if '|' in path:
-                # capture everything before and after "|"
-                templates = re.findall('([^|]*)\|(.*)', path)
-                print('template_files'. templates)
-                result = self.util.merge_dicts(result, templates)
+            if self.template_seperator in path:
+                # capture everything before and after the first "|"
+                k, v = path.split(self.template_seperator, 1)
+                result = self.util.merge_dicts(result, {k: v})
         return result
 
     def load_snippet_file(self, snippet):
@@ -278,8 +278,8 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         template_file_vars = {}
         for i in template_files:
             # there may be more than one template:
-            if '|' in template_files[i]:
-                templates = template_files[i].split('|')
+            if self.template_seperator in template_files[i]:
+                templates = template_files[i].split(self.template_seperator)
             else:
                 templates = [template_files[i]]
 
