@@ -209,14 +209,26 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                                 _template = self.util.resolve_path(_template, snippet.dir)
                                 self.log('fill file with file: ' + _template)
                                 content = self.util.get_file_content(_template)
-                            content = sublime.expand_variables(content, snippet.vars)
+                            content = self.expand_variables(content, snippet.vars)
                             self.util.put_file_content(_file, content)
 
     def replace_vars(self, snippet):
         for i, item in enumerate(snippet.files_and_folders):
-            item = sublime.expand_variables(item, snippet.vars)
+            item = self.expand_variables(item, snippet.vars)
             snippet.files_and_folders[i] = item
         return snippet
+
+    def expand_variables(self, value, variables):
+        """
+            sublimes expand_variables will remove words
+            beginning with an unescaped $, so we do it
+            yourselfes.
+        """
+        for v in variables:
+            pattern = '\$\{'+re.escape(v)+'\}'
+            replace = variables.get(v, '')
+            value = re.sub(pattern, replace, value)
+        return value
 
     def find_vars(self, txt):
         """
