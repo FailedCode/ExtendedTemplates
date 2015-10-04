@@ -303,6 +303,11 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                     new_vars = self.find_vars(template_content)
                     template_file_vars = self.util.merge_dicts(template_file_vars, new_vars)
 
+        # extract variables from inline content
+        for template_content in snippet.content.values():
+            new_vars = self.find_vars(template_content)
+            template_file_vars = self.util.merge_dicts(template_file_vars, new_vars)
+
         # Template variables set in the snippet file
         template_vars = snippet.vars
 
