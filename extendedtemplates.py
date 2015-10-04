@@ -12,10 +12,11 @@ class SnippetFile(object):
         Save all data from json file for later
     """
 
-    def __init__(self, name, description, files_and_folders, var, path):
+    def __init__(self, name, description, files_and_folders, content, var, path):
         self.name = name
         self.description = description
         self.files_and_folders = files_and_folders
+        self.content = content
         self.vars = var
         self.path = path
         self.dir = os.path.dirname(path)
@@ -176,10 +177,13 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             # soooo how to deal with os specific paths?
             # item = os.path.normpath(item)
 
-            _template = ''
+            _templates = []
             if '|' in item:
                 item, tmpl = re.findall('([^|]*)\|(.*)', item)[0]
-                _template = self.util.resolve_path(tmpl, snippet.dir)
+                if '|' in tmpl:
+                    _templates = tmpl.split('|')
+                else:
+                    _templates = [tmpl]
 
             _folder, _file = os.path.split(item)
             newfolder = self.util.resolve_path(_folder, path)
@@ -192,11 +196,20 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                 if not os.path.isfile(item):
                     self.log('create file: ' + _file)
                     self.util.touch_file(_file)
-                    if _template:
-                        self.log('fill file with: ' + _template)
-                        content = self.util.get_file_content(_template)
-                        content = sublime.expand_variables(content, snippet.vars)
-                        self.util.put_file_content(_file, content)
+                    if _templates:
+                        for _template in _templates:
+                            if _template.startswith('<') and _template.endswith('>'):
+                                # content
+                                content_key = _template[1:-1]
+                                self.log('fill file with content: ' + content_key)
+                                content = snippet.content.get(content_key, '')
+                            else:
+                                # file:
+                                _template = self.util.resolve_path(_template, snippet.dir)
+                                self.log('fill file with file: ' + _template)
+                                content = self.util.get_file_content(_template)
+                            content = sublime.expand_variables(content, snippet.vars)
+                            self.util.put_file_content(_file, content)
 
     def replace_vars(self, snippet):
         for i, item in enumerate(snippet.files_and_folders):
@@ -241,6 +254,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             if '|' in path:
                 # capture everything before and after "|"
                 templates = re.findall('([^|]*)\|(.*)', path)
+                print('template_files'. templates)
                 result = self.util.merge_dicts(result, templates)
         return result
 
@@ -263,12 +277,19 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         # so we need to find those too
         template_file_vars = {}
         for i in template_files:
-            # paths in the snippet file are of course relative to the snippet file
-            template_path = self.util.resolve_path(template_files[i], snippet.dir)
-            if os.path.exists(template_path):
-                template_content = self.util.get_file_content(template_path)
-                new_vars = self.find_vars(template_content)
-                template_file_vars = self.util.merge_dicts(template_file_vars, new_vars)
+            # there may be more than one template:
+            if '|' in template_files[i]:
+                templates = template_files[i].split('|')
+            else:
+                templates = [template_files[i]]
+
+            for template in templates:
+                # paths in the snippet file are of course relative to the snippet file
+                template_path = self.util.resolve_path(template, snippet.dir)
+                if os.path.exists(template_path):
+                    template_content = self.util.get_file_content(template_path)
+                    new_vars = self.find_vars(template_content)
+                    template_file_vars = self.util.merge_dicts(template_file_vars, new_vars)
 
         # Template variables set in the snippet file
         template_vars = snippet.vars
@@ -296,10 +317,11 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             return
 
         snippet = SnippetFile(
-            snippet_data['name'],
-            snippet_data['description'],
-            snippet_data['files_and_folders'],
-            snippet_data['vars'],
+            snippet_data.get('name', 'UNNAMED'),
+            snippet_data.get('description', ''),
+            snippet_data.get('files_and_folders', []),
+            snippet_data.get('content', {}),
+            snippet_data.get('vars', {}),
             path
         )
         self.snippet_list.append(snippet)
