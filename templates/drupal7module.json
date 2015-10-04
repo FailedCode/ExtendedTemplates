@@ -1,0 +1,10 @@
+{
+	"name": "Drupal 7 Module",
+	"description": "A Drupal Module",
+	"vars": {},
+	"files_and_folders": [
+		"${module_name}/${module_name}.info|drupal/module_template.info",
+		"${module_name}/${module_name}.module|drupal/module_template.module",
+		"${module_name}/${module_name}.install|drupal/module_template.install"
+	]
+}

@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file ${module_name}.install
+ */
+
+/**
+ * Implements hook_install().
+ */
+function ${module_name}_install() {
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ${module_name}_uninstall() {
+
+}
+
+/**
+ * Implements hook_enable().
+ */
+function ${module_name}_enable() {
+
+}
+
+/**
+ * Implements hook_disable().
+ */
+function ${module_name}_disable() {
+
+}

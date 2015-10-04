@@ -1,0 +1,7 @@
+name = ${module_name}
+description = A Template of a Drupal Module
+core = 7.x
+package = "Category of Module"
+
+;dependencies[] =
+;files[] =
