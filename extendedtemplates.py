@@ -276,11 +276,14 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         # Global variables set in the settings file
         global_vars = self.settings.get('vars')
 
+        # Sublime own variables such as "folder", "project", "project_name" etc.
+        sublime_vars = self.window.extract_variables()
+
         # Generated variables
         special_vars = self.special_vars()
 
         # absolutely all variables to be used
-        snippet.vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars, special_vars)
+        snippet.vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars, sublime_vars, special_vars)
 
     def load_snippet_preview(self, path):
         # the filepath sould be already absolute and existing
