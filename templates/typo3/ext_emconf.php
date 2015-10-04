@@ -8,17 +8,25 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_email' => '${author_email}',
 	'author_company' => '${author_company}',
 	'shy' => '',
+	'priority' => '',
+	'module' => '',
 	'state' => 'alpha',
-	'uploadfolder' => 1,
+	'internal' => '',
+	'uploadfolder' => 0,
+	'createDirs' => '',
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '1.0.0',
+	'version' => '',
 	'constraints' => array(
 		'depends' => array(
-			'typo3' => '6.2.2-7.1.99'
+			'extbase' => '6.0',
+			'fluid' => '6.0',
+			'typo3' => '6.0'
 		),
-		'conflicts' => array(),
-		'suggests' => array(),
+		'conflicts' => array(
+		),
+		'suggests' => array(
+		),
 	),
 );
