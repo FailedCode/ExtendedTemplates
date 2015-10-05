@@ -321,7 +321,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         special_vars = self.special_vars()
 
         # absolutely all variables to be used
-        snippet.vars = self.util.merge_dicts(path_vars, template_file_vars, template_vars, global_vars, sublime_vars, special_vars)
+        snippet.vars = self.util.merge_dicts(path_vars, template_file_vars, sublime_vars, global_vars, template_vars, special_vars)
 
     def load_snippet_preview(self, path):
         # the filepath sould be already absolute and existing
