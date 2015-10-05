@@ -194,7 +194,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
             if _file:
                 _file = self.util.resolve_path(item, path)
-                if not os.path.isfile(item):
+                if not os.path.isfile(_file):
                     self.log('create file: ' + _file)
                     self.util.touch_file(_file)
                     if _templates:
