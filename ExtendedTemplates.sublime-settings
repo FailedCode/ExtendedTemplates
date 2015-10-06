@@ -22,6 +22,12 @@
 		"author_company": ""
 	},
 
+	// Set to true if you want to clutter your window
+	// with all those new files.
+	// Set to false if you want to search for the new
+	// file you just created.
+	"open_created_files": true,
+
 	// Writes to console
 	// "NONE", "DEBUG", "INFO", "WARN", "ERROR",
 	//

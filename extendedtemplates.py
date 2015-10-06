@@ -211,6 +211,9 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                                 content = self.util.get_file_content(_template)
                             content = self.expand_variables(content, snippet.vars)
                             self.util.put_file_content(_file, content)
+                    # After the files are created and filled with content, open them for the user
+                    if self.settings.get('open_created_files', True):
+                        self.window.open_file(_file)
 
     def replace_vars(self, snippet):
         for i, item in enumerate(snippet.files_and_folders):
