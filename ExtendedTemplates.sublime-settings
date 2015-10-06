@@ -30,6 +30,43 @@
 	// file you just created.
 	"open_created_files": true,
 
+	// These files do not contain text and should
+	// therefore be ignored when searching for (or
+	// replacing of) variables.
+	// Also, they are not opened after creation.
+	"exclude_file_extensions": [
+		// Images
+		"bmp",
+		"gif",
+		"jpg",
+		"jpeg",
+		"png",
+		"psd",
+		"thm",
+		"tif",
+		// fonts
+		"otf",
+		"ttf",
+		// Sound
+		"mp3",
+		"wav",
+		// Documents
+		"pdf",
+		"doc",
+		"docx",
+		// Binary
+		"exe",
+		"dll",
+		"swf",
+		"7z",
+		"zip",
+		"rar",
+		// Misc
+		"bak",
+		"iso",
+		"tmp"
+	],
+
 	// Writes to console
 	// "NONE", "DEBUG", "INFO", "WARN", "ERROR",
 	//

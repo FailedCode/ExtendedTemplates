@@ -5,6 +5,7 @@ import json
 import re
 import functools
 import datetime
+import shutil
 
 
 class SnippetFile(object):
@@ -172,12 +173,13 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
     def run_snippet_creation(self, snippet, path):
         snippet = self.replace_vars(snippet)
+        exclude_file_extensions = self.settings.get('exclude_file_extensions', [])
+
         for item in snippet.files_and_folders:
             # normpath removes trailing slahes - no way
             # to tell the difference between file and folder!
             # soooo how to deal with os specific paths?
             # item = os.path.normpath(item)
-
             _templates = []
             if self.template_seperator in item:
                 item, tmpl = item.split(self.template_seperator, 1)
@@ -208,12 +210,19 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                                 # file:
                                 _template = self.util.resolve_path(_template, snippet.dir)
                                 self.log('fill file with file: ' + _template)
+                                # plain copy binary files
+                                ext = os.path.splitext(_template)[1][1:]
+                                if ext in exclude_file_extensions:
+                                    shutil.copyfile(_template, _file)
+                                    continue
                                 content = self.util.get_file_content(_template)
                             content = self.expand_variables(content, snippet.vars)
                             self.util.put_file_content(_file, content)
                     # After the files are created and filled with content, open them for the user
                     if self.settings.get('open_created_files', True):
-                        self.window.open_file(_file)
+                        ext = os.path.splitext(_file)[1][1:]
+                        if ext not in exclude_file_extensions:
+                            self.window.open_file(_file)
 
     def replace_vars(self, snippet):
         for i, item in enumerate(snippet.files_and_folders):
@@ -290,6 +299,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
         # each template file may contain variables
         # so we need to find those too
+        exclude_file_extensions = self.settings.get('exclude_file_extensions', [])
         template_file_vars = {}
         for i in template_files:
             # there may be more than one template:
@@ -301,6 +311,12 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             for template in templates:
                 # paths in the snippet file are of course relative to the snippet file
                 template_path = self.util.resolve_path(template, snippet.dir)
+
+                # Do not search in those files (images, binary data etc.)
+                ext = os.path.splitext(template)[1][1:]
+                if ext in exclude_file_extensions:
+                    continue
+
                 if os.path.exists(template_path):
                     template_content = self.util.get_file_content(template_path)
                     new_vars = self.find_vars(template_content)

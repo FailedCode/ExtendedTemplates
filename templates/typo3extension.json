@@ -25,7 +25,8 @@
 		"${extension_name}/ext_emconf.php|typo3/ext_emconf.php",
 		"${extension_name}/ext_localconf.php|<php>|<typo3mode>",
 		"${extension_name}/ext_tables.php|<php>|<typo3mode>",
-		"${extension_name}/ext_tables.sql"
+		"${extension_name}/ext_tables.sql",
+		"${extension_name}/ext_icon.gif|typo3/ext_icon.gif"
 	],
 	"content": {
 		"php": "<?php\n",
