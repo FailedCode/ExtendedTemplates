@@ -8,11 +8,12 @@ Download / Clone to `Sublime Text 3\Data\Packages`
 
 ## Settings
 Like most plugins, the settings are added to the menu at `Preferences / Package Settings / Extended Templates`  
-Make sure to define the "vars" block in your user settings.
+Make sure to define the "vars" block in your user settings.  
+Read the default settings file for detailed information.
 
 ## Snippets
-The default templates are located in the plugin subfolder "templates".  
-Every json file should contain these values:
+The default templates are located in the plugin subfolder "templates". You can place your own in the `User/ExtendedTemplates/templates/` directory.  
+Every json file can contain these values:
 
 | Key                   | Type          | Description |
 | :-------------------- | :------------ | :---------- |
@@ -36,12 +37,12 @@ Occurences of `${var_name}` will be replaced.
 ### Special variables
 These variables are filled on runtime with the current date/time:
 
-| Variable     | Format               | Example Value |
-| :----------- | :------------------- | :------------ |
+| Variable     | Format               | Example Value          |
+| :----------- | :------------------- | :--------------------- |
 | `_timestamp` | `%Y-%m-%dT%H:%M:%SZ` | `2015-09-27T16:59:15Z` |
-| `_datetime`  | `%Y-%m-%d %H:%M`     | `2015-09-27 16:59` |
-| `_date`      | `%Y-%m-%d`           | `2015-09-27` |
-| `_time`      | `%H:%M`              | `16:59` |
+| `_datetime`  | `%Y-%m-%d %H:%M`     | `2015-09-27 16:59`     |
+| `_date`      | `%Y-%m-%d`           | `2015-09-27`           |
+| `_time`      | `%H:%M`              | `16:59`                |
 
 ### Sublime variables
 These variables are provided by Sublime text:  
@@ -58,17 +59,30 @@ So, you could override `project_path` in your settings file or set `author_name`
 
 ## Examples
 
-#### Snippet
+#### Snippet `python.json`
 ``` json
 {
-	"name": "Test",
-	"description": "Simple example for a snippet",
-	"vars": {
-		"dir": "foobar"
-	},
+	"name": "Python Module",
+	"description": "Empty python Module",
 	"files_and_folders": [
-		"base/${dir}/",
-		"base/readme.md"
+		"${module_name}/__init__.py"
+	]
+}
+```
+#### Creates
+
+| Path                      | Description     |
+| :------------------------ | :-------------- |
+| `module_name/`            | Empty directory |
+| `module_name/__init__.py` | Empty file      |
+
+#### Snippet `phpclass.json`
+``` json
+{
+	"name": "php class",
+	"description": "Add a php class",
+	"files_and_folders": [
+		"${name}Class.php|php/class.php"
 	]
 }
 ```
@@ -76,19 +90,20 @@ So, you could override `project_path` in your settings file or set `author_name`
 
 | Path             | Description     |
 | :--------------- | :-------------- |
-| `base/`          | Empty Directory |
-| `base/foobar/`   | Empty Directory |
-| `base/readme.md` | Empty File      |
+| `nameClass.php`  | File with the contents of the file `php/class.php` (relative to the json file) |
 
-#### Snippet
+#### Snippet `html.json`
 ``` json
 {
 	"name": "HTML",
 	"description": "Small HTML project",
+	"vars": {
+		"version": "-html5"
+	},
 	"files_and_folders": [
 		"css/style.css|<banner>",
 		"js/script.js|<banner>|<js-ready>",
-		"index.html|html/index.html"
+		"index.html|html/index${version}.html"
 	],
 	"content": {
 		"banner": "/* Created at ${_datetime} by ${author_name} */\n",
@@ -100,11 +115,11 @@ So, you could override `project_path` in your settings file or set `author_name`
 
 | Path            | Description |
 | :-------------- | :---------- |
-| `css/`          | Empty Directory |
+| `css/`          | Empty directory |
 | `css/style.css` | File with the `banner` content |
-| `js/`           | Empty Directory |
+| `js/`           | Empty directory |
 | `js/script.js`  | File with the `banner` and `js-ready` content |
-| `index.html`    | File with the contents of the file `html/index.html` (relative to the json file) |
+| `index.html`    | File with the contents of the file `html/index-html5.html` |
 
 ## Inspired by
 https://github.com/bit101/STProjectMaker
