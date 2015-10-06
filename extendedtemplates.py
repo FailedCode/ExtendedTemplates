@@ -358,6 +358,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             if not os.path.exists(folder):
                 self.log('The folder "{0}" in "include_folders" does not exists'.format(folder), 'WARN')
                 continue
+            self.log('Scanning "{0}" from "include_folders"'.format(folder))
 
             # Look for .json files in valid folders
             for file in os.listdir(folder):

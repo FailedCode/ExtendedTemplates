@@ -8,8 +8,10 @@
 {
 	// This is a list of all folders containing
 	// json configuration files for templates
+	// These paths are relative to the plugin directory
 	"include_folders": [
-		"./templates/"
+		"templates/",
+		"../User/ExtendedTemplates/templates/"
 	],
 
 	// Block of global variables.
