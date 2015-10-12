@@ -31,8 +31,11 @@ Already existing files will not be altered.
 If you need only a very small template and don't want to clutter your system with tiny files, you can define content within the snippet file.
 
 ## Variables
-The user gets promptet to input variable values if their value is the same as their key. They may be set in the snippet file or the settings.  
-Occurences of `${var_name}` will be replaced.
+All occurences of `${var_name}` will be found in the snippet file and the template files and later on replaced.  
+Variables may be set in the snippet file or the settings.  
+There are two ways to set variables:  
+1. Set the value to a String. The user gets promptet to input variable values only if their value is the same as their key.  
+2. Set the value to a list of dictionaries with the keys `value` and `text`. The User may choose between those values. If Escape is hit the variable will be filled with an empty string.  
 
 ### Special variables
 These variables are filled on runtime with the current date/time:
@@ -120,6 +123,33 @@ So, you could override `project_path` in your settings file or set `author_name`
 | `js/`           | Empty directory |
 | `js/script.js`  | File with the `banner` and `js-ready` content |
 | `index.html`    | File with the contents of the file `html/index-html5.html` |
+
+#### Snippet `jquery.json`
+``` json
+{
+	"name": "jQuery",
+	"description": "Select a jQuery version",
+	"vars": {
+		"version": [
+			{"value": "1.11.3", "text": "jQuery 1.x"},
+			{"value": "2.1.4",  "text": "jQuery 2.x"},
+			{"value": "3.0.0",  "text": "jQuery 3.x"}
+		],
+		"min": [
+			{"value": ".min", "text": "use compressed source"},
+			{"value": "",     "text": "use uncompressed developmend source"}
+		]
+	},
+	"files_and_folders": [
+		"jquery.js|js/jquery-${version}${min}.js"
+	]
+}
+```
+#### Creates
+
+| Path            | Description |
+| :-------------- | :---------- |
+| `jquery.js`     | Copys the content from `js/jquery-1.11.3.min.js` if the first options are selected **or** from `js/jquery-.js` if the User hits Escape in every case. |
 
 ## Inspired by
 https://github.com/bit101/STProjectMaker

@@ -89,12 +89,25 @@ class ExtendedTemplatesUtility(object):
         """
         def progress(result):
             try:
-                progress.caption, progress.initial_text = gen_function.send(result)
-                sublime.active_window().show_input_panel(
-                    progress.caption,
-                    progress.initial_text,
-                    progress, None, None
-                )
+                progress.variable_name, progress.initial_value = gen_function.send(result)
+
+                if type(progress.initial_value) is str:
+                    sublime.active_window().show_input_panel(
+                        progress.variable_name,
+                        progress.initial_value,
+                        progress, None, None
+                    )
+                else:
+                    items = []
+                    for option in progress.initial_value:
+                        text = option['text']
+                        desc = 'sets var "{0}" to "{1}"'.format(progress.variable_name, option['value'])
+                        items.append([text, desc])
+                    sublime.active_window().show_quick_panel(
+                        items,
+                        progress
+                    )
+
             except StopIteration:
                 if hasattr(on_done, '__call__'):
                     on_done()
@@ -167,9 +180,16 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             ignores already set values
         """
         for i in var_dict:
-            if i == var_dict[i]:
-                result = yield('set variable '+i, var_dict[i])
-                var_dict[i] = result
+            if type(var_dict[i]) is str:
+                if i == var_dict[i]:
+                    result = yield(i, var_dict[i])
+                    var_dict[i] = result
+            else:
+                nr = yield(i, var_dict[i])
+                if nr == -1:
+                    var_dict[i] = ''
+                else:
+                    var_dict[i] = var_dict[i][nr].get('value', '')
 
     def run_snippet_creation(self, snippet, path):
         snippet = self.replace_vars(snippet)
