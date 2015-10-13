@@ -31,11 +31,44 @@ Already existing files will not be altered.
 If you need only a very small template and don't want to clutter your system with tiny files, you can define content within the snippet file.
 
 ## Variables
-All occurences of `${var_name}` will be found in the snippet file and the template files and later on replaced.  
+All occurences of `${var_name}` will be found in the snippet file and the template files.  
 Variables may be set in the snippet file or the settings.  
-There are two ways to set variables:  
-1. Set the value to a String. The user gets promptet to input variable values only if their value is the same as their key.  
-2. Set the value to a list of dictionaries with the keys `value` and `text`. The User may choose between those values. If Escape is hit the variable will be filled with an empty string.  
+
+### Methods to set variables
+
+#### Example `text`
+```
+	"vars": {
+		"version": "v1.0.5",
+		"name": "name",
+	}
+```
+The user won't be promptet for `version`, `${version}` will replaced with `v1.0.5`.  
+The user will be promptet to enter a string for `name`, `${name}` will replaced with the entered string. It makes sense to do this only if you want to override a variable with some user input, since the user will be promptet for every variable used but not explicitly set.
+
+#### Example `dict`
+```
+	"vars": {
+		"food": [
+			{"value": "cake",  "text": "Sweet and tasty!"},
+			{"value": "bacon", "text": "Salty and delicous!"},
+			{"value": "curry", "text": "Hot, hot and hot!"}
+		]
+	}
+```
+The user will ne promptet for `food`, `${food}` will replaced with one of these: `cake`, `bacon`, `curry` or an empty String.
+
+#### Example `list`
+```
+	"vars": {
+		"food": [
+			["cake",  "Sweet and tasty!"],
+			["bacon", "Salty and delicous!"],
+			["curry", "Hot, hot and hot!"]
+		]
+	}
+```
+Exactly the same as the example above!
 
 ### Special variables
 These variables are filled on runtime with the current date/time:
@@ -136,8 +169,8 @@ So, you could override `project_path` in your settings file or set `author_name`
 			{"value": "3.0.0",  "text": "jQuery 3.x"}
 		],
 		"min": [
-			{"value": ".min", "text": "use compressed source"},
-			{"value": "",     "text": "use uncompressed developmend source"}
+			[".min", "use compressed source"],
+			["",     "use uncompressed developmend source"]
 		]
 	},
 	"files_and_folders": [
