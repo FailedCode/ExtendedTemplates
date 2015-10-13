@@ -100,8 +100,12 @@ class ExtendedTemplatesUtility(object):
                 else:
                     items = []
                     for option in progress.initial_value:
-                        text = option['text']
-                        desc = 'sets var "{0}" to "{1}"'.format(progress.variable_name, option['value'])
+                        if type(option) is dict:
+                            text = option['text']
+                            desc = 'sets var "{0}" to "{1}"'.format(progress.variable_name, option['value'])
+                        elif type(option) is list and len(option) > 1:
+                            text = option[1]
+                            desc = 'sets var "{0}" to "{1}"'.format(progress.variable_name, option[0])
                         items.append([text, desc])
                     sublime.active_window().show_quick_panel(
                         items,
@@ -189,7 +193,10 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                 if nr == -1:
                     var_dict[i] = ''
                 else:
-                    var_dict[i] = var_dict[i][nr].get('value', '')
+                    if type(var_dict[i][nr]) is dict:
+                        var_dict[i] = var_dict[i][nr].get('value', '')
+                    else:
+                        var_dict[i] = var_dict[i][nr][0]
 
     def run_snippet_creation(self, snippet, path):
         snippet = self.replace_vars(snippet)
