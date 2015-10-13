@@ -93,6 +93,21 @@ See also [API reference](https://www.sublimetext.com/docs/3/api_reference.html)
 
 So, you could override `project_path` in your settings file or set `author_name` in the snippet file to the value `author_name` to prompt the user.
 
+### Variable Modification
+There are some options available to modify values before they are inserted. At this time is it not possible to combine modifiers.
+
+| Modifier | Usage             | Effect           |
+| :------- | :---------------- |:---------------- |
+| *none*   | `${var}`          | `this IS a teSt` |
+| upper    | `${var|upper}`    | `THIS IS A TEST` |
+| lower    | `${var|lower}`    | `this is a test` |
+| title    | `${var|title}`    | `This Is A Test` |
+| capital  | `${var|capital}`  | `This IS a teSt` |
+| camel    | `${var|camel}`    | `ThisIsATest`    |
+| snake    | `${var|snake}`    | `this_is_a_test` |
+| constant | `${var|constant}` | `THIS_IS_A_TEST` |
+
+
 ## Examples
 
 #### Snippet `python.json`
