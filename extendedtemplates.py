@@ -132,6 +132,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         self.log_level_list = {'NONE': 0, 'DEBUG': 25, 'INFO': 50, 'WARN': 75, 'ERROR': 100}
         self.snippet_list = []
         self.template_seperator = '|'
+        self.variable_seperator = '|'
         self.log('log_level: ' + self.log_level)
 
     def log(self, msg, level='INFO'):
@@ -263,10 +264,56 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             beginning with an unescaped $, so we do it
             yourselfes.
         """
-        for v in variables:
-            pattern = '\$\{'+re.escape(v)+'\}'
-            replace = variables.get(v, '')
-            value = re.sub(pattern, replace, value)
+
+        def upper(v):
+            return v.upper()
+
+        def lower(v):
+            return v.lower()
+
+        def title(v):
+            return v.title()
+
+        def capital(v):
+            """
+                str.capitalize() will lowercase the
+                rest of the string - does someone really
+                want that?
+            """
+            if len(v) > 2:
+                return v[0].upper() + v[1:]
+            elif len(v) == 1:
+                return v.upper()
+            else:
+                return ''
+
+        def camel(v):
+            return v.title().replace(' ', '')
+
+        def snake(v):
+            return v.replace(' ', '_').lower()
+
+        def constant(v):
+            return v.replace(' ', '_').upper()
+
+        options = {
+            "": None,
+            self.variable_seperator+"upper": upper,
+            self.variable_seperator+"lower": lower,
+            self.variable_seperator+"title": title,
+            self.variable_seperator+"capital": capital,
+            self.variable_seperator+"camel": camel,
+            self.variable_seperator+"snake": snake,
+            self.variable_seperator+"constant": constant
+        }
+        for opt in options:
+            func = options[opt]
+            for v in variables:
+                pattern = '\$\{'+re.escape(v+opt)+'\}'
+                replace = variables.get(v, '')
+                if func:
+                    replace = func(replace)
+                value = re.sub(pattern, replace, value)
         return value
 
     def find_vars(self, txt):
@@ -275,6 +322,9 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             in the text, e.g. "${name}"
         """
         variables = re.findall('\$\{([^\}]*)\}', txt, re.MULTILINE)
+        for n, v in enumerate(variables):
+            if self.variable_seperator in v:
+                variables[n] = v.split(self.variable_seperator, 1)[0]
         # Removes Doublettes
         variables = self.util.merge_lists(variables)
         # Make it a dictionary
