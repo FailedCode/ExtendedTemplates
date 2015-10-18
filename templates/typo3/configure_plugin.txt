@@ -1,0 +1,12 @@
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+    'vendor.' . $_EXTKEY,
+    '${plugin_name}',
+    array(
+        'SomeAction' => '',
+    ),
+    // non-cacheable actions
+    array(
+        'SomeAction' => '',
+    )
+);

@@ -23,8 +23,8 @@
 		"${extension_name}/Resources/Public/Images/",
 		"${extension_name}/Resources/Public/JavaScript/",
 		"${extension_name}/ext_emconf.php|typo3/ext_emconf.php",
-		"${extension_name}/ext_localconf.php|<php>|<typo3mode>",
-		"${extension_name}/ext_tables.php|<php>|<typo3mode>",
+		"${extension_name}/ext_localconf.php|<php>|<typo3mode>|typo3/configure_plugin.txt",
+		"${extension_name}/ext_tables.php|<php>|<typo3mode>|typo3/register_plugin.txt|typo3/static_config.txt",
 		"${extension_name}/ext_tables.sql",
 		"${extension_name}/ext_icon.gif|typo3/ext_icon.gif"
 	],
