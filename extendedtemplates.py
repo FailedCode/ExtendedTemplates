@@ -313,7 +313,10 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                 replace = variables.get(v, '')
                 if func:
                     replace = func(replace)
-                value = re.sub(pattern, replace, value)
+                try:
+                    value = re.sub(pattern, replace, value)
+                except:
+                    self.log('expand_variables: '+pattern+' - '+replace+' - '+value, 'WARN')
         return value
 
     def find_vars(self, txt):
