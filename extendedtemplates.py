@@ -344,7 +344,10 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             "_timestamp": today.strftime('%Y-%m-%dT%H:%M:%SZ'),
             "_datetime": today.strftime('%Y-%m-%d %H:%M'),
             "_date": today.strftime('%Y-%m-%d'),
-            "_time": today.strftime('%H:%M')
+            "_time": today.strftime('%H:%M'),
+            "_year": today.strftime('%Y'),
+            "_month": today.strftime('%m'),
+            "_day": today.strftime('%d')
         }
         return variables
 

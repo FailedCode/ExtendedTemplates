@@ -79,6 +79,9 @@ These variables are filled on runtime with the current date/time:
 | `_datetime`  | `%Y-%m-%d %H:%M`     | `2015-09-27 16:59`     |
 | `_date`      | `%Y-%m-%d`           | `2015-09-27`           |
 | `_time`      | `%H:%M`              | `16:59`                |
+| `_year`      | `%Y`                 | `2015`                 |
+| `_month`     | `%m`                 | `09`                   |
+| `_day`       | `%d`                 | `27`                   |
 
 ### Sublime variables
 These variables are provided by Sublime text:  
