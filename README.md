@@ -12,7 +12,7 @@ Make sure to define the "vars" block in your user settings.
 Read the default settings file for detailed information.
 
 ## Snippets
-The default templates are located in the plugin subfolder "templates". You can place your own in the `User/ExtendedTemplates/templates/` directory.  
+The default snippets are located in the plugin subfolder "templates" (the folders in the settings are searched recursively) and must end with `.def.json`. You can place your own in the `User/ExtendedTemplates/templates/` directory. 
 Every json file can contain these values:
 
 | Key                   | Type          | Description |

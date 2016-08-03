@@ -447,7 +447,17 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
     def load_include_folders(self):
         self.snippet_list = []
+        snippet_extension = ".def.json"
         include_folders = self.settings.get('include_folders')
+
+        def recursive_find_snippets(self, folder):
+            for item in os.listdir(folder):
+                path = os.path.join(folder, item)
+                # ignore folders starting with '.'
+                if os.path.isdir(path) and not item.startswith("."):
+                    recursive_find_snippets(self, path)
+                if os.path.isfile(path) and item.endswith(snippet_extension):
+                    self.load_snippet_preview(path)
 
         for folder in include_folders:
             # Rewrite the path to something more usefull
@@ -459,7 +469,5 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                 continue
             self.log('Scanning "{0}" from "include_folders"'.format(folder))
 
-            # Look for .json files in valid folders
-            for file in os.listdir(folder):
-                if file.endswith(".json"):
-                    self.load_snippet_preview(os.path.join(folder, file))
+            # Look for .def.json files in valid folders
+            recursive_find_snippets(self, folder)
