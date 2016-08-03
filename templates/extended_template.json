@@ -1,8 +1,0 @@
-{
-	"name": "Extended Template",
-	"description": "New Extended Template snippet",
-	"vars": {},
-	"files_and_folders": [
-		"${name}.json|json/extended_template.json"
-	]
-}
