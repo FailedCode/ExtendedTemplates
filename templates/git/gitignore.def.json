@@ -1,0 +1,10 @@
+{
+  "name": "Gitignore",
+  "description": "download from github",
+  "files_and_folders": [
+    ".gitignore|<comment>|[https://raw.githubusercontent.com/github/gitignore/master/Global/Linux.gitignore]|[https://raw.githubusercontent.com/github/gitignore/master/Global/OSX.gitignore]|[https://raw.githubusercontent.com/github/gitignore/master/Global/Windows.gitignore]"
+  ],
+  "content": {
+    "comment": "# downloaded from github\n\n"
+  }
+}
