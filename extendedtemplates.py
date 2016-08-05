@@ -6,6 +6,7 @@ import re
 import functools
 import datetime
 import shutil
+import urllib.request
 
 
 class SnippetFile(object):
@@ -63,6 +64,11 @@ class ExtendedTemplatesUtility(object):
     def touch_file(self, path):
         with open(path, 'a'):
             os.utime(path, None)
+
+    def get_url_content(self, url):
+        with urllib.request.urlopen(url) as response:
+            content = response.read().decode('utf-8')
+        return content
 
     def merge_dicts(self, *dict_args):
         result = {}
@@ -229,11 +235,17 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
                     self.util.touch_file(_file)
                     if _templates:
                         for _template in _templates:
+                            # Insert <content>
                             if _template.startswith('<') and _template.endswith('>'):
-                                # content
                                 content_key = _template[1:-1]
                                 self.log('fill file with content: {0}'.format(content_key))
                                 content = snippet.content.get(content_key, '')
+                            # Download [http//example.com/content]
+                            elif _template.startswith('[') and _template.endswith(']'):
+                                content_url = _template[1:-1]
+                                if content_url.startswith('http'):
+                                    self.log('download content from: "{0}"'.format(content_url))
+                                    content = self.util.get_url_content(content_url)
                             else:
                                 # file:
                                 _template = self.util.resolve_path(_template, snippet.dir)
