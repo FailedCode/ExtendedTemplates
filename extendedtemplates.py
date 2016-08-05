@@ -58,6 +58,8 @@ class ExtendedTemplatesUtility(object):
         return content
 
     def put_file_content(self, path, content):
+        if content is None:
+            return
         with open(path, 'a') as f:
             f.write(content)
 
@@ -307,6 +309,9 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
         def constant(v):
             return v.replace(' ', '_').upper()
+
+        if value is None:
+            return ''
 
         options = {
             '': None,
