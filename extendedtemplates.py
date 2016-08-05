@@ -52,12 +52,12 @@ class ExtendedTemplatesUtility(object):
         return path
 
     def get_file_content(self, path):
-        with open(path, "r") as f:
+        with open(path, 'r') as f:
             content = f.read()
         return content
 
     def put_file_content(self, path, content):
-        with open(path, "a") as f:
+        with open(path, 'a') as f:
             f.write(content)
 
     def touch_file(self, path):
@@ -124,7 +124,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         new_from_template Command
     """
 
-    def __init__(self, paths=[], name=""):
+    def __init__(self, paths=[], name=''):
         self.window = sublime.active_window()
         self.util = ExtendedTemplatesUtility()
         self.settings = self.util.load_settings()
@@ -133,7 +133,7 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         self.snippet_list = []
         self.template_seperator = '|'
         self.variable_seperator = '|'
-        self.log('log_level: ' + self.log_level)
+        self.log('log_level: {0}'.format(self.log_level))
 
     def log(self, msg, level='INFO'):
         if self.log_level is 'NONE':
@@ -219,25 +219,25 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             _folder, _file = os.path.split(item)
             newfolder = self.util.resolve_path(_folder, path)
             if not os.path.isdir(newfolder):
-                self.log('create folders: ' + newfolder)
+                self.log('create folders: {0}'.format(newfolder))
                 os.makedirs(newfolder)
 
             if _file:
                 _file = self.util.resolve_path(item, path)
                 if not os.path.isfile(_file):
-                    self.log('create file: ' + _file)
+                    self.log('create file: {0}'.format(_file))
                     self.util.touch_file(_file)
                     if _templates:
                         for _template in _templates:
                             if _template.startswith('<') and _template.endswith('>'):
                                 # content
                                 content_key = _template[1:-1]
-                                self.log('fill file with content: ' + content_key)
+                                self.log('fill file with content: {0}'.format(content_key))
                                 content = snippet.content.get(content_key, '')
                             else:
                                 # file:
                                 _template = self.util.resolve_path(_template, snippet.dir)
-                                self.log('fill file with file: ' + _template)
+                                self.log('fill file with file: {0}'.format(_template))
                                 # plain copy binary files
                                 ext = os.path.splitext(_template)[1][1:]
                                 if ext in exclude_file_extensions:
@@ -297,26 +297,26 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
             return v.replace(' ', '_').upper()
 
         options = {
-            "": None,
-            self.variable_seperator+"upper": upper,
-            self.variable_seperator+"lower": lower,
-            self.variable_seperator+"title": title,
-            self.variable_seperator+"capital": capital,
-            self.variable_seperator+"camel": camel,
-            self.variable_seperator+"snake": snake,
-            self.variable_seperator+"constant": constant
+            '': None,
+            self.variable_seperator + 'upper': upper,
+            self.variable_seperator + 'lower': lower,
+            self.variable_seperator + 'title': title,
+            self.variable_seperator + 'capital': capital,
+            self.variable_seperator + 'camel': camel,
+            self.variable_seperator + 'snake': snake,
+            self.variable_seperator + 'constant': constant
         }
         for opt in options:
             func = options[opt]
             for v in variables:
-                pattern = '\$\{'+re.escape(v+opt)+'\}'
+                pattern = '\$\{' + re.escape(v + opt) + '\}'
                 replace = variables.get(v, '')
                 if func:
                     replace = func(replace)
                 try:
                     value = re.sub(pattern, replace, value)
                 except:
-                    self.log('expand_variables: '+pattern+' - '+replace+' - '+value, 'WARN')
+                    self.log('expand_variables: {0} - {1} - {2}'.format(pattern, replace, value), 'WARN')
         return value
 
     def find_vars(self, txt):
@@ -341,13 +341,13 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
         """
         today = datetime.datetime.today()
         variables = {
-            "_timestamp": today.strftime('%Y-%m-%dT%H:%M:%SZ'),
-            "_datetime": today.strftime('%Y-%m-%d %H:%M'),
-            "_date": today.strftime('%Y-%m-%d'),
-            "_time": today.strftime('%H:%M'),
-            "_year": today.strftime('%Y'),
-            "_month": today.strftime('%m'),
-            "_day": today.strftime('%d')
+            '_timestamp': today.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            '_datetime': today.strftime('%Y-%m-%d %H:%M'),
+            '_date': today.strftime('%Y-%m-%d'),
+            '_time': today.strftime('%H:%M'),
+            '_year': today.strftime('%Y'),
+            '_month': today.strftime('%m'),
+            '_day': today.strftime('%d')
         }
         return variables
 
@@ -447,14 +447,14 @@ class NewFromTemplateCommand(sublime_plugin.WindowCommand):
 
     def load_include_folders(self):
         self.snippet_list = []
-        snippet_extension = ".def.json"
+        snippet_extension = '.def.json'
         include_folders = self.settings.get('include_folders')
 
         def recursive_find_snippets(self, folder):
             for item in os.listdir(folder):
                 path = os.path.join(folder, item)
                 # ignore folders starting with '.'
-                if os.path.isdir(path) and not item.startswith("."):
+                if os.path.isdir(path) and not item.startswith('.'):
                     recursive_find_snippets(self, path)
                 if os.path.isfile(path) and item.endswith(snippet_extension):
                     self.load_snippet_preview(path)
